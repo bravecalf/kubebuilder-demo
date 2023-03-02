@@ -25,7 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"kubebuilder-demo/utils"
+	"kubebuilder-demo/controllers/utils"
 	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -45,6 +45,9 @@ type FooReconciler struct {
 //+kubebuilder:rbac:groups=myapp.my.domain,resources=foos,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=myapp.my.domain,resources=foos/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=myapp.my.domain,resources=foos/finalizers,verbs=update
+//+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -109,7 +112,7 @@ func (r *FooReconciler) handleDeployment(ctx context.Context, foo *myappv1.Foo) 
 	if errors.IsNotFound(err) {
 		// create deployment
 		errCreate := r.Create(ctx, expectDeployment)
-		if errCreate != nil {
+		if errCreate != nil && !errors.IsAlreadyExists(errCreate) {
 			r.logger.Error(errCreate, "Failed to create deployment.")
 			return errCreate
 		}
@@ -156,7 +159,7 @@ func (r *FooReconciler) handleService(ctx context.Context, foo *myappv1.Foo) err
 		if foo.Spec.EnableService {
 			// create service
 			err := r.Create(ctx, expectService)
-			if err != nil {
+			if err != nil && !errors.IsAlreadyExists(err) {
 				r.logger.Error(err, "Failed to create service.")
 				return err
 			}
@@ -203,7 +206,7 @@ func (r *FooReconciler) handleIngress(ctx context.Context, foo *myappv1.Foo) err
 		if foo.Spec.EnableIngress {
 			// create ingress
 			err := r.Create(ctx, expectIngress)
-			if err != nil {
+			if err != nil && !errors.IsAlreadyExists(err) {
 				r.logger.Error(err, "Failed to create ingress.")
 				return err
 			}

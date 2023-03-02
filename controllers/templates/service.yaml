@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.ObjectMeta.Name}}
+  namespace: {{.ObjectMeta.Namespace}}
+  labels:
+    {{range $key, $value := .ObjectMeta.Labels}}
+    {{$key}}: {{$value}}
+    {{end}}
+    myapp.my.domain/manager-by: {{.ObjectMeta.UID}}
+spec:
+  selector:
+    {{range $key, $value := .ObjectMeta.Labels}}
+    {{$key}}: {{$value}}
+    {{end}}
+  ports:
+    - protocol: TCP
+      port: {{.Spec.ContainerPort}}
+      targetPort: {{.Spec.ContainerPort}}
+  type: ClusterIP

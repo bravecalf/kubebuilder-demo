@@ -26,7 +26,7 @@ kubectl get crd
 ```
 ![img.png](pictures/img.png)
 
-## 2.本地运行
+## 2. 本地运行
 ```shell
 # 运行Manager
 go run main.go
@@ -36,3 +36,20 @@ kubectl apply -f templates/foo.yaml
 kubectl edit foo my-inference
 ```
 ![img2](pictures/img2.png)
+
+
+## 3. add webhook, deploy manager-controller
+```shell
+# create webhook codes
+kubebuilder create webhook --group myapp --version v1 --kind Foo --defaulting  --programmatic-validation
+
+# Implementing defaulting/validating webhooks and running controller with webhook in cluster
+https://book.kubebuilder.io/cronjob-tutorial/webhook-implementation.html
+
+# build image
+make docker-build docker-push IMG=dongzhoujie2023/controller:latest
+
+# deploy manager-controller
+make deploy IMG=dongzhoujie2023/controller:latest
+```
+

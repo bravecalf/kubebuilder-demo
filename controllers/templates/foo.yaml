@@ -1,0 +1,15 @@
+apiVersion: "myapp.my.domain/v1"
+kind: Foo
+metadata:
+  name: my-inference
+  namespace: default
+  labels:
+    app: nginx
+    myapp.my.domain/use-for: kubebuilder-demo
+    myapp.my.domain/manager-by: goku
+spec:
+  replicas: 1
+  image: nginx
+  containerPort: 80
+  enable_service: true
+  enable_ingress: true
