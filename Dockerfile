@@ -27,6 +27,8 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o ma
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /
+
+COPY controllers/templates/ /controllers/templates/
 COPY --from=builder /workspace/manager .
 USER 65532:65532
 

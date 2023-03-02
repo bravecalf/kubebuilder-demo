@@ -7,6 +7,7 @@
 .idea/
 .dockerignore
 go.sum
+bin/
 
 # Test binary, built with `go test -c`
 *.test

@@ -15,6 +15,6 @@ spec:
     {{end}}
   ports:
     - protocol: TCP
-      type: ClusterIP
       port: {{.Spec.ContainerPort}}
       targetPort: {{.Spec.ContainerPort}}
+  type: ClusterIP

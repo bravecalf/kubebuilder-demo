@@ -12,7 +12,7 @@ import (
 )
 
 func parseTemplate(name string, app *myappv1.Foo) []byte {
-	tmpl, err := template.ParseFiles(fmt.Sprintf("templates/%s.yaml", name))
+	tmpl, err := template.ParseFiles(fmt.Sprintf("controllers/templates/%s.yaml", name))
 	if err != nil {
 		panic(err)
 	}
