@@ -37,7 +37,6 @@ kubectl edit foo my-inference
 ```
 ![img2](pictures/img2.png)
 
-
 ## 3. 增加webhook, 部署manager-controller
 ```shell
 # create webhook codes
